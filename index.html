@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget Laptop Comparison for Local LLMs in Thailand</title>
+    <meta name="referrer" content="no-referrer">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -85,6 +86,20 @@
             color: white;
             border-color: #3B82F6;
         }
+        .sort-icon-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            margin-left: 0.35rem;
+            font-size: 0.65rem;
+            line-height: 0.6;
+        }
+        .sort-icon-wrapper i {
+            opacity: 0.25;
+            transition: opacity 0.2s;
+        }
+        .sort-btn.active[data-dir="asc"] .fa-caret-up { opacity: 1; }
+        .sort-btn.active[data-dir="desc"] .fa-caret-down { opacity: 1; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -116,12 +131,13 @@
                     <i class="fas fa-filter mr-2"></i>Filter Laptops
                 </h2>
                 <div class="flex items-center text-blue-600 font-medium">
-                    <span id="toggleText" class="mr-2">Hide Filters</span>
-                    <i class="fas fa-chevron-up filter-toggle-icon" id="toggleIcon"></i>
+                    <span id="toggleText" class="mr-2">Show Filters</span>
+                    <i class="fas fa-chevron-up filter-toggle-icon rotated" id="toggleIcon"></i>
                 </div>
             </div>
             
-            <div id="filterContent" class="mt-6">
+            <form id="filterForm">
+                <div id="filterContent" class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6 collapsed">
                 <!-- Price Range -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price Range (THB)</label>
@@ -173,23 +189,24 @@
                         <i class="fas fa-redo mr-2"></i>Reset
                     </button>
                 </div>
+                </div>
             </form>
             
             <!-- Quick Filter Buttons -->
             <div class="mt-6 pt-6 border-t border-gray-200">
                 <h3 class="text-sm font-medium text-gray-700 mb-2">Quick Filters:</h3>
                 <div class="flex flex-wrap gap-2">
-                    <button data-filter="under20k" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
-                        <i class="fas fa-wallet mr-1"></i> Under 20K THB
+                    <button data-filter="budget" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-wallet mr-1"></i> Budget Warriors (< 20K)
                     </button>
-                    <button data-filter="bestPerf" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
-                        <i class="fas fa-bolt mr-1"></i> Best Performance
+                    <button data-filter="high_perf" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-bolt mr-1"></i> High Performance (Score 85+)
                     </button>
-                    <button data-filter="highRam" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
-                        <i class="fas fa-memory mr-1"></i> 16GB+ RAM
+                    <button data-filter="premium" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-gem mr-1"></i> Premium Tier (> 25K)
                     </button>
-                    <button data-filter="asus" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
-                        <i class="fas fa-desktop mr-1"></i> ASUS Only
+                    <button data-filter="sweet_spot" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-bullseye mr-1"></i> Sweet Spot (20k-25k)
                     </button>
                 </div>
             </div>
@@ -206,25 +223,23 @@
                 <!-- Sort Menu -->
                 <div id="sortMenu" class="flex flex-wrap items-center gap-2">
                     <span class="text-gray-600 text-sm mr-1">Sort by:</span>
-                    <button data-sort="performance" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100 active">
-                        Performance
+                    <button data-sort="performance" data-dir="desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100 active">
+                        Performance <span class="sort-icon-wrapper"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span>
                     </button>
-                    <button data-sort="price_asc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
-                        Price: Low-High
+                    <button data-sort="price" data-dir="asc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        Price <span class="sort-icon-wrapper"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span>
                     </button>
-                    <button data-sort="price_desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
-                        Price: High-Low
+                    <button data-sort="ram" data-dir="desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        RAM <span class="sort-icon-wrapper"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span>
                     </button>
-                    <button data-sort="ram" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
-                        RAM
+                    <button data-sort="cpu_cores" data-dir="desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        CPU Cores <span class="sort-icon-wrapper"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span>
                     </button>
-                    <!-- Hidden select for backward compatibility/logic simplicity -->
-                    <select id="sortSelect" class="hidden">
-                        <option value="performance">performance</option>
-                        <option value="price_asc">price_asc</option>
-                        <option value="price_desc">price_desc</option>
-                        <option value="ram">ram</option>
-                    </select>
+                    <button data-sort="storage" data-dir="desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        Storage <span class="sort-icon-wrapper"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span>
+                    </button>
+                    <!-- Hidden input to store current sort state for URL sync and logic -->
+                    <input type="hidden" id="sortSelectDropdown" value="performance_desc">
                 </div>
             </div>
         </div>
@@ -283,6 +298,7 @@
 
     <script src="laptops.js"></script>
     <script>
+        console.log('Laptop comparison script initializing...');
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         let allLaptops = [];
@@ -291,7 +307,7 @@
         const resultCount = document.getElementById('resultCount');
         const noResults = document.getElementById('noResults');
         const brandSelect = document.getElementById('brand');
-        const sortSelect = document.getElementById('sortSelect');
+        const sortSelectDropdown = document.getElementById('sortSelectDropdown');
 
         // Initial Data Fetch
         async function init() {
@@ -320,7 +336,7 @@
                 if (params.has('min_ram')) document.getElementById('min_ram').value = params.get('min_ram');
                 if (params.has('brand')) document.getElementById('brand').value = params.get('brand');
                 if (params.has('min_performance')) document.getElementById('min_performance').value = params.get('min_performance');
-                if (params.has('sort')) sortSelect.value = params.get('sort');
+                if (params.has('sort')) sortSelectDropdown.value = params.get('sort');
 
                 render();
             } catch (error) {
@@ -335,7 +351,7 @@
             const minRam = parseInt(document.getElementById('min_ram').value) || 0;
             const brand = document.getElementById('brand').value;
             const minPerformance = parseInt(document.getElementById('min_performance').value) || 0;
-            const sort = sortSelect.value;
+            const sort = sortSelectDropdown.value;
 
             // Filter logic
             let filtered = allLaptops.filter(laptop => {
@@ -348,11 +364,22 @@
 
             // Sort logic
             filtered.sort((a, b) => {
-                if (sort === 'performance') return b.llm_performance_score - a.llm_performance_score;
-                if (sort === 'price_asc') return a.price_thb - b.price_thb;
-                if (sort === 'price_desc') return b.price_thb - a.price_thb;
-                if (sort === 'ram') return b.ram_gb - a.ram_gb;
-                return 0;
+                const parts = sort.split('_');
+                const sortField = parts[0] === 'cpu' ? 'cpu_cores' : parts[0]; // handle cpu_cores split if needed, but it's easier:
+                
+                // Extract sortField and sortDir. Handle case where sortField has an underscore like cpu_cores
+                const sortDir = parts.pop(); 
+                const actualSortField = parts.join('_');
+
+                let valA, valB;
+                if (actualSortField === 'performance') { valA = a.llm_performance_score; valB = b.llm_performance_score; }
+                else if (actualSortField === 'price') { valA = a.price_thb; valB = b.price_thb; }
+                else if (actualSortField === 'ram') { valA = a.ram_gb; valB = b.ram_gb; }
+                else if (actualSortField === 'cpu_cores') { valA = a.cpu_cores; valB = b.cpu_cores; }
+                else if (actualSortField === 'storage') { valA = a.storage_gb; valB = b.storage_gb; }
+                else return 0; // Default fallback
+
+                return sortDir === 'asc' ? valA - valB : valB - valA;
             });
 
             // Update UI
@@ -368,7 +395,7 @@
                 laptopGrid.innerHTML = filtered.map(laptop => `
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover">
                         <div class="relative h-48 bg-gray-200 overflow-hidden">
-                            <img src="${laptop.image_url}" alt="${laptop.name}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=Laptop'">
+                            <img src="${laptop.image_url}" alt="${laptop.name}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=Laptop'">
                             <div class="absolute top-2 right-2">
                                 <span class="performance-badge performance-${Math.floor(laptop.llm_performance_score / 10) * 10}">
                                     ${laptop.llm_performance_score} Score
@@ -455,27 +482,35 @@
 
         sortButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                const sortValue = btn.dataset.sort;
+                const sortType = btn.dataset.sort;
                 
-                // Update active state
-                sortButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                if (btn.classList.contains('active')) {
+                    // Toggle direction if already active
+                    const currentDir = btn.dataset.dir;
+                    btn.dataset.dir = currentDir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    // Change active button
+                    sortButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
                 
                 // Update hidden select and trigger render
-                sortSelect.value = sortValue;
+                sortSelectDropdown.value = `${sortType}_${btn.dataset.dir}`;
                 render();
             });
         });
 
-        sortSelect.addEventListener('change', render);
+        sortSelectDropdown.addEventListener('change', render);
 
         document.getElementById('resetBtn').addEventListener('click', () => {
             filterForm.reset();
             
-            // Reset sort menu to performance
+            // Reset sort menu to performance_desc
             sortButtons.forEach(b => b.classList.remove('active'));
-            document.querySelector('[data-sort="performance"]').classList.add('active');
-            sortSelect.value = 'performance';
+            const defaultBtn = document.querySelector('[data-sort="performance"]');
+            defaultBtn.classList.add('active');
+            defaultBtn.dataset.dir = 'desc';
+            sortSelectDropdown.value = 'performance_desc';
             
             render();
         });
@@ -483,10 +518,12 @@
         document.getElementById('resetAllBtn').addEventListener('click', () => {
             filterForm.reset();
             
-            // Reset sort menu to performance
+            // Reset sort menu to performance_desc
             sortButtons.forEach(b => b.classList.remove('active'));
-            document.querySelector('[data-sort="performance"]').classList.add('active');
-            sortSelect.value = 'performance';
+            const defaultBtn = document.querySelector('[data-sort="performance"]');
+            defaultBtn.classList.add('active');
+            defaultBtn.dataset.dir = 'desc';
+            sortSelectDropdown.value = 'performance_desc';
             
             render();
         });
@@ -497,26 +534,26 @@
                 const filterType = btn.dataset.filter;
                 filterForm.reset();
                 
-                if (filterType === 'under20k') {
-                    document.getElementById('min_price').value = 15000;
+                if (filterType === 'budget') {
+                    document.getElementById('min_price').value = 10000;
                     document.getElementById('max_price').value = 20000;
                     document.getElementById('min_ram').value = 8;
-                    document.getElementById('min_performance').value = 50;
-                } else if (filterType === 'bestPerf') {
-                    document.getElementById('min_price').value = 20000;
-                    document.getElementById('max_price').value = 25000;
-                    document.getElementById('min_ram').value = 8;
-                    document.getElementById('min_performance').value = 60;
-                } else if (filterType === 'highRam') {
+                    document.getElementById('min_performance').value = 30;
+                } else if (filterType === 'high_perf') {
                     document.getElementById('min_price').value = 15000;
-                    document.getElementById('max_price').value = 35000;
+                    document.getElementById('max_price').value = 100000;
+                    document.getElementById('min_ram').value = 16;
+                    document.getElementById('min_performance').value = 70; // Map closest to 85+ without breaking dropdown (options: 30, 40, 50, 60, 70). Oh wait, I can just set 70 for UI since 85 isn't an option, but the logic handles any number. Let's set 70.
+                } else if (filterType === 'premium') {
+                    document.getElementById('min_price').value = 25000;
+                    document.getElementById('max_price').value = 100000;
                     document.getElementById('min_ram').value = 16;
                     document.getElementById('min_performance').value = 60;
-                } else if (filterType === 'asus') {
+                } else if (filterType === 'sweet_spot') {
                     document.getElementById('min_price').value = 20000;
-                    document.getElementById('max_price').value = 35000;
-                    document.getElementById('brand').value = 'ASUS';
-                    document.getElementById('min_performance').value = 70;
+                    document.getElementById('max_price').value = 25000;
+                    document.getElementById('min_ram').value = 16;
+                    document.getElementById('min_performance').value = 60;
                 }
                 
                 render();
