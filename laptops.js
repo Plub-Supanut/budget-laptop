@@ -14,7 +14,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 95,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/82278/25/NOTEBOOK--โน้ตบุ๊ค--HP-15-FD1471TU---SILVER",
-        "image_url": "https://th-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/C/J/CJ6C2PA-1_T1760320082.png",
+        "image_url": "images/HP_15-FD1471TU.png",
         "last_updated": "2024-05-02"
     },
     {
@@ -32,7 +32,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 88,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-lenovo/notebook-lenovo-ideapad-slim-3-16irh10-83k2007sta-cosmic-blue-",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2024/10/3-4-e1728371265717.jpg",
+        "image_url": "images/Lenovo_IdeaPad_Slim_3_16IRH10.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -50,7 +50,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 87,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-lenovo/notebook-lenovo-ideapad-slim-3-16ahp10-83kb0030ta-luna-grey-",
-        "image_url": "https://img.advice.co.th/images_nas/pic_product4/A0177121/A0177121OK_ORI_1.jpg",
+        "image_url": "images/Lenovo_IdeaPad_Slim_3_16AHP10.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -68,7 +68,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 82,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-lenovo/notebook-lenovo-ideapad-slim-5-16imh9-83dc00a3ta-cloud-grey-",
-        "image_url": "https://media-cdn.bnn.in.th/400671/lenovo-ideapad-slim-5i-16imh9-83dc004bta-cloud-grey-3-square_medium.jpg",
+        "image_url": "images/Lenovo_IdeaPad_Slim_5_16IMH9.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -86,7 +86,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 78,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/81412/25/NOTEBOOK--โน้ตบุ๊ค--ASUS-VIVOBOOK-15-X1502VA-BQ590WA---QUIET-BLUE",
-        "image_url": "https://www.idcmayoristas.com/wp-content/uploads/2025/06/laptop-asus-vivobook-15-ci5-13420h-2-1ghz-16gb-512gb-ssd-quiet-blue-15-6fhd-freedosmochilamouse-01034.png",
+        "image_url": "images/ASUS_Vivobook_15_X1502VA.png",
         "last_updated": "2024-05-02"
     },
     {
@@ -104,7 +104,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 75,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-asus/notebook-asus-vivobook-17-x1704va-au523wa-quiet-blue-",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2023/03/3-17-e1678697052462.jpg",
+        "image_url": "images/ASUS_Vivobook_17_X1704VA.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -122,7 +122,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 72,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/79535/25/NOTEBOOK--โน้ตบุ๊ค--DELL-15-DC15250I5161---PLATINUM-SILVER",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2023/07/3-70.jpg",
+        "image_url": "images/Dell_Inspiron_15_3530.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -140,7 +140,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 70,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-asus/notebook-asus-vivobook-16-x1607ca-mb535wa-indie-black-",
-        "image_url": "https://www.asus.com/media/global/SKU/90NB15A1-M001R0/oubi3rtntifrjog4.jpg",
+        "image_url": "images/ASUS_Vivobook_16_X1607CA.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -158,7 +158,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 74,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-acer/notebook-acer-aspire-5-a515-58m-56u6-steel-gray-",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2023/06/acer-aspire-5-a515-48m-non-fingerprint-non-backlit-wallpaper-logo-steel-gray-01.tif-custom-e1686115242406.jpg",
+        "image_url": "images/Acer_Aspire_5_A515-58M.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -176,7 +176,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 73,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/58421/25/NOTEBOOK--โน้ตบุ๊ค--MSI-MODERN-15-B13M-442TH---CLASSIC-BLACK",
-        "image_url": "https://laptop15.vn/wp-content/uploads/2024/01/MSI-Modern-15-B13M-438VN-1.jpg",
+        "image_url": "images/MSI_Modern_15_B13M.jpg",
         "last_updated": "2024-05-02"
     },
     {
@@ -194,7 +194,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 4,
         "llm_performance_score": 86,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/66205/25/NOTEBOOK--โน้ตบุ๊ค--LENOVO-LOQ-15IAX9-83GS003XTA---LUNA-GREY",
-        "image_url": "https://laptop15.vn/wp-content/uploads/2024/03/Lenovo-LOQ-15IAX9-1.jpg",
+        "image_url": "images/Lenovo_LOQ_15IAX9.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -212,7 +212,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 4,
         "llm_performance_score": 85,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-acer/notebook-acer-nitro-v-15-anv15-51-54p3-obsidian-black-",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2023/09/acer-nitro-v-15-anv15-51-non-fingerprint-with-backlit-on-wp-logo-black-02.tif-custom-scaled-e1695938700395.jpg",
+        "image_url": "images/Acer_Nitro_V_15_ANV15-51.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -230,7 +230,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 4,
         "llm_performance_score": 84,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/75082/25/NOTEBOOK--โน้ตบุ๊ค--HP-VICTUS-15-FB2028AX---MICA-SILVER",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2024/07/2-16-e1720780911548.jpg",
+        "image_url": "images/HP_Victus_15-fb2028AX.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -248,7 +248,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 4,
         "llm_performance_score": 87,
         "shop_url": "https://www.jib.co.th/web/product/readProduct/66304/25/NOTEBOOK--โน้ตบุ๊ค--MSI-THIN-15-B12UC-1418TH---COSMOS-GRAY",
-        "image_url": "https://www.laptoparena.net/images/MSI_Thin_15_THIN_15_B12UC-1437_image_8.jpg",
+        "image_url": "images/MSI_Thin_15_B12UC-1418TH.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -266,7 +266,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 77,
         "shop_url": "https://consumer.huawei.com/th/laptops/matebook-d-14-2024/",
-        "image_url": "https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/pc/matebook-d-14-2023/img/kv/huawei-matebook-d-14-2023-key-vision.jpg",
+        "image_url": "images/Huawei_MateBook_D_14_2024.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -284,7 +284,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 82,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-acer/notebook-acer-swift-go-14-sfg14-73-50xv-silver-",
-        "image_url": "https://media-cdn.bnn.in.th/403261/acer-swift-go-14-sfg14-73-517x-blue-4-square_medium.jpg",
+        "image_url": "images/Acer_Swift_Go_14_SFG14-73-50XV.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -302,7 +302,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 76,
         "shop_url": "https://www.honor.com/th/laptops/honor-magicbook-x-16-2024/",
-        "image_url": "https://laptopdecision.com/img/cropped/px600/honor-magicbook-x-16-2024-main.jpg",
+        "image_url": "images/Honor_MagicBook_X_16_2024.jpg",
         "last_updated": "2024-05-03"
     },
     {
@@ -320,7 +320,7 @@ const LAPTOP_DATA = [
         "gpu_vram_gb": 0,
         "llm_performance_score": 55,
         "shop_url": "https://www.advice.co.th/product/notebook/notebook-acer/notebook-acer-aspire-3-a315-510p-389d-pure-silver-",
-        "image_url": "https://laptopmedia.com/wp-content/uploads/2022/11/3-14.jpg",
+        "image_url": "images/Acer_Aspire_3_A315-510P-389D.jpg",
         "last_updated": "2024-05-03"
     }
 ];
