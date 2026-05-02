@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Laptop Comparison for Local LLMs in Thailand</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .performance-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            background-color: #6B7280; /* Default gray fallback */
+            color: white;
+        }
+        .performance-100 { background-color: #047857; color: white; }
+        .performance-90 { background-color: #059669; color: white; }
+        .performance-80 { background-color: #10B981; color: white; }
+        .performance-70 { background-color: #3B82F6; color: white; }
+        .performance-60 { background-color: #8B5CF6; color: white; }
+        .performance-50 { background-color: #F59E0B; color: white; }
+        .performance-40 { background-color: #EF4444; color: white; }
+        
+        .gpu-badge {
+            background-color: #1E40AF;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+        
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .filter-active {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        /* Skeleton loader */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Collapsible Filter Styles */
+        #filterContent {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin-top 0.3s ease-out;
+        }
+        #filterContent.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            pointer-events: none;
+        }
+        .filter-toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .filter-toggle-icon.rotated {
+            transform: rotate(-180deg);
+        }
+
+        /* Sort Menu Styles */
+        .sort-btn {
+            transition: all 0.2s ease;
+        }
+        .sort-btn.active {
+            background-color: #3B82F6;
+            color: white;
+            border-color: #3B82F6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-blue-800">
+                        <i class="fas fa-laptop mr-2"></i>Budget Laptop Comparison for Local LLMs
+                    </h1>
+                    <p class="text-gray-600 mt-2">Find the best budget laptops in Thailand for running local Large Language Models</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <span class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Thailand
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Filters Section -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <div class="flex justify-between items-center cursor-pointer" id="filterToggle">
+                <h2 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-filter mr-2"></i>Filter Laptops
+                </h2>
+                <div class="flex items-center text-blue-600 font-medium">
+                    <span id="toggleText" class="mr-2">Hide Filters</span>
+                    <i class="fas fa-chevron-up filter-toggle-icon" id="toggleIcon"></i>
+                </div>
+            </div>
+            
+            <div id="filterContent" class="mt-6">
+                <!-- Price Range -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Price Range (THB)</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="number" id="min_price" name="min_price" value="15000" min="10000" max="100000" class="w-full p-2 border border-gray-300 rounded">
+                        <span class="text-gray-500">to</span>
+                        <input type="number" id="max_price" name="max_price" value="35000" min="10000" max="100000" class="w-full p-2 border border-gray-300 rounded">
+                    </div>
+                </div>
+                
+                <!-- Minimum RAM -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Minimum RAM (GB)</label>
+                    <select id="min_ram" name="min_ram" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="4">4 GB</option>
+                        <option value="8" selected>8 GB</option>
+                        <option value="12">12 GB</option>
+                        <option value="16">16 GB</option>
+                        <option value="32">32 GB</option>
+                    </select>
+                </div>
+                
+                <!-- Brand Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+                    <select id="brand" name="brand" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="all">All Brands</option>
+                        <!-- Dynamic brand options will be inserted here -->
+                    </select>
+                </div>
+                
+                <!-- Performance Score -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Min LLM Performance</label>
+                    <select id="min_performance" name="min_performance" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="30">30+ (Basic)</option>
+                        <option value="40" selected>40+ (Fair)</option>
+                        <option value="50">50+ (Good)</option>
+                        <option value="60">60+ (Very Good)</option>
+                        <option value="70">70+ (Excellent)</option>
+                    </select>
+                </div>
+                
+                <div class="md:col-span-4 flex justify-end space-x-2 mt-2">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-search mr-2"></i>Apply Filters
+                    </button>
+                    <button type="button" id="resetBtn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">
+                        <i class="fas fa-redo mr-2"></i>Reset
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Quick Filter Buttons -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Quick Filters:</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button data-filter="under20k" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-wallet mr-1"></i> Under 20K THB
+                    </button>
+                    <button data-filter="bestPerf" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-bolt mr-1"></i> Best Performance
+                    </button>
+                    <button data-filter="highRam" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-memory mr-1"></i> 16GB+ RAM
+                    </button>
+                    <button data-filter="asus" class="quick-filter-btn px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">
+                        <i class="fas fa-desktop mr-1"></i> ASUS Only
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Summary -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-list mr-2"></i>Available Laptops
+                    <span id="resultCount" class="text-lg font-normal text-gray-600 ml-2">(Loading...)</span>
+                </h2>
+                
+                <!-- Sort Menu -->
+                <div id="sortMenu" class="flex flex-wrap items-center gap-2">
+                    <span class="text-gray-600 text-sm mr-1">Sort by:</span>
+                    <button data-sort="performance" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100 active">
+                        Performance
+                    </button>
+                    <button data-sort="price_asc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        Price: Low-High
+                    </button>
+                    <button data-sort="price_desc" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        Price: High-Low
+                    </button>
+                    <button data-sort="ram" class="sort-btn px-3 py-1 text-sm border border-gray-300 rounded-full hover:bg-gray-100">
+                        RAM
+                    </button>
+                    <!-- Hidden select for backward compatibility/logic simplicity -->
+                    <select id="sortSelect" class="hidden">
+                        <option value="performance">performance</option>
+                        <option value="price_asc">price_asc</option>
+                        <option value="price_desc">price_desc</option>
+                        <option value="ram">ram</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Laptop Grid -->
+        <div id="laptopGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Skeleton items while loading -->
+            <div class="skeleton-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-96"></div>
+            <div class="skeleton-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-96"></div>
+            <div class="skeleton-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-96"></div>
+            <div class="skeleton-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-96"></div>
+        </div>
+
+        <!-- No Results Message (Hidden by default) -->
+        <div id="noResults" class="hidden bg-white rounded-lg shadow p-12 text-center">
+            <i class="fas fa-search fa-3x text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-700">No laptops found</h3>
+            <p class="text-gray-500 mt-2">Try adjusting your filters to see more results.</p>
+            <button id="resetAllBtn" class="inline-block mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                Reset All Filters
+            </button>
+        </div>
+
+        <!-- LLM Explanation -->
+        <div class="mt-12 bg-blue-900 text-white rounded-2xl p-8 shadow-xl">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/3 text-center">
+                    <i class="fas fa-brain fa-5x opacity-20"></i>
+                    <h3 class="text-2xl font-bold mt-4">LLM Performance?</h3>
+                </div>
+                <div class="md:w-2/3">
+                    <p class="text-blue-100 leading-relaxed">
+                        The performance score indicates how well a laptop can run local Large Language Models (like Llama 3, Mistral, or Phi-3). We consider CPU cores, RAM speed, and GPU capabilities.
+                    </p>
+                    <ul class="mt-4 space-y-2 text-sm text-blue-200">
+                        <li><i class="fas fa-check-circle mr-2 text-green-400"></i> <strong>Score 70+:</strong> Smoothly runs 7B-8B parameter models with decent speed.</li>
+                        <li><i class="fas fa-check-circle mr-2 text-green-400"></i> <strong>Score 50-69:</strong> Capable of running 7B models, though response time may vary.</li>
+                        <li><i class="fas fa-check-circle mr-2 text-yellow-400"></i> <strong>Score < 50:</strong> Best suited for small models (1B-3B) or basic tasks.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>&copy; <span id="currentYear"></span> Budget Laptop Comparison Thailand. Prices and availability are subject to change.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="hover:text-blue-400 transition"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="hover:text-gray-900 transition"><i class="fab fa-github fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="laptops.js"></script>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        let allLaptops = [];
+        const filterForm = document.getElementById('filterForm');
+        const laptopGrid = document.getElementById('laptopGrid');
+        const resultCount = document.getElementById('resultCount');
+        const noResults = document.getElementById('noResults');
+        const brandSelect = document.getElementById('brand');
+        const sortSelect = document.getElementById('sortSelect');
+
+        // Initial Data Fetch
+        async function init() {
+            try {
+                // Use LAPTOP_DATA from laptops.js if available (fixes CORS issues locally)
+                if (typeof LAPTOP_DATA !== 'undefined') {
+                    allLaptops = LAPTOP_DATA;
+                } else {
+                    const response = await fetch('laptops.json');
+                    allLaptops = await response.json();
+                }
+                
+                // Populate Brands
+                const brands = [...new Set(allLaptops.map(l => l.brand))].sort();
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    brandSelect.appendChild(option);
+                });
+
+                // Apply initial filters from URL
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('min_price')) document.getElementById('min_price').value = params.get('min_price');
+                if (params.has('max_price')) document.getElementById('max_price').value = params.get('max_price');
+                if (params.has('min_ram')) document.getElementById('min_ram').value = params.get('min_ram');
+                if (params.has('brand')) document.getElementById('brand').value = params.get('brand');
+                if (params.has('min_performance')) document.getElementById('min_performance').value = params.get('min_performance');
+                if (params.has('sort')) sortSelect.value = params.get('sort');
+
+                render();
+            } catch (error) {
+                console.error('Error loading laptops:', error);
+                laptopGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-12">Failed to load laptop data. Please try again later.</p>';
+            }
+        }
+
+        function render() {
+            const minPrice = parseInt(document.getElementById('min_price').value) || 0;
+            const maxPrice = parseInt(document.getElementById('max_price').value) || 999999;
+            const minRam = parseInt(document.getElementById('min_ram').value) || 0;
+            const brand = document.getElementById('brand').value;
+            const minPerformance = parseInt(document.getElementById('min_performance').value) || 0;
+            const sort = sortSelect.value;
+
+            // Filter logic
+            let filtered = allLaptops.filter(laptop => {
+                return laptop.price_thb >= minPrice &&
+                       laptop.price_thb <= maxPrice &&
+                       laptop.ram_gb >= minRam &&
+                       laptop.llm_performance_score >= minPerformance &&
+                       (brand === 'all' || laptop.brand === brand);
+            });
+
+            // Sort logic
+            filtered.sort((a, b) => {
+                if (sort === 'performance') return b.llm_performance_score - a.llm_performance_score;
+                if (sort === 'price_asc') return a.price_thb - b.price_thb;
+                if (sort === 'price_desc') return b.price_thb - a.price_thb;
+                if (sort === 'ram') return b.ram_gb - a.ram_gb;
+                return 0;
+            });
+
+            // Update UI
+            resultCount.textContent = `(${filtered.length} found)`;
+            
+            if (filtered.length === 0) {
+                laptopGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                laptopGrid.classList.remove('hidden');
+                noResults.classList.add('hidden');
+                
+                laptopGrid.innerHTML = filtered.map(laptop => `
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover">
+                        <div class="relative h-48 bg-gray-200 overflow-hidden">
+                            <img src="${laptop.image_url}" alt="${laptop.name}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=Laptop'">
+                            <div class="absolute top-2 right-2">
+                                <span class="performance-badge performance-${Math.floor(laptop.llm_performance_score / 10) * 10}">
+                                    ${laptop.llm_performance_score} Score
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">${laptop.brand}</span>
+                                    <h3 class="text-lg font-bold text-gray-800 leading-tight">${laptop.name}</h3>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="text-2xl font-bold text-blue-800">฿${laptop.price_thb.toLocaleString()}</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-sm text-gray-600 mb-5">
+                                <div class="flex items-center">
+                                    <i class="fas fa-microchip w-5 text-gray-400"></i>
+                                    <span class="truncate ml-1" title="${laptop.cpu_model}">${laptop.cpu_model}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-memory w-5 text-gray-400"></i>
+                                    <span>${laptop.ram_gb}GB ${laptop.ram_type}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-hdd w-5 text-gray-400"></i>
+                                    <span>${laptop.storage_gb}GB ${laptop.storage_type}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-video w-5 text-gray-400"></i>
+                                    <span class="gpu-badge ml-1">${laptop.gpu_model}</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-gray-100">
+                                <a href="${laptop.shop_url}" target="_blank" class="block w-full text-center py-2 bg-blue-50 text-blue-700 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition">
+                                    View on Shop <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Sync URL
+            const url = new URL(window.location);
+            const formData = new FormData(filterForm);
+            for (const [key, value] of formData.entries()) {
+                url.searchParams.set(key, value);
+            }
+            url.searchParams.set('sort', sort);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Event Listeners
+        filterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            render();
+        });
+
+        // Filter Toggle Logic
+        const filterToggle = document.getElementById('filterToggle');
+        const filterContent = document.getElementById('filterContent');
+        const toggleText = document.getElementById('toggleText');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        filterToggle.addEventListener('click', () => {
+            filterContent.classList.toggle('collapsed');
+            toggleIcon.classList.toggle('rotated');
+            
+            if (filterContent.classList.contains('collapsed')) {
+                toggleText.textContent = 'Show Filters';
+            } else {
+                toggleText.textContent = 'Hide Filters';
+            }
+        });
+
+        // Sort Menu Logic
+        const sortButtons = document.querySelectorAll('.sort-btn');
+
+        sortButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sortValue = btn.dataset.sort;
+                
+                // Update active state
+                sortButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update hidden select and trigger render
+                sortSelect.value = sortValue;
+                render();
+            });
+        });
+
+        sortSelect.addEventListener('change', render);
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            filterForm.reset();
+            
+            // Reset sort menu to performance
+            sortButtons.forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-sort="performance"]').classList.add('active');
+            sortSelect.value = 'performance';
+            
+            render();
+        });
+
+        document.getElementById('resetAllBtn').addEventListener('click', () => {
+            filterForm.reset();
+            
+            // Reset sort menu to performance
+            sortButtons.forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-sort="performance"]').classList.add('active');
+            sortSelect.value = 'performance';
+            
+            render();
+        });
+
+        // Quick Filters
+        document.querySelectorAll('.quick-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filterType = btn.dataset.filter;
+                filterForm.reset();
+                
+                if (filterType === 'under20k') {
+                    document.getElementById('min_price').value = 15000;
+                    document.getElementById('max_price').value = 20000;
+                    document.getElementById('min_ram').value = 8;
+                    document.getElementById('min_performance').value = 50;
+                } else if (filterType === 'bestPerf') {
+                    document.getElementById('min_price').value = 20000;
+                    document.getElementById('max_price').value = 25000;
+                    document.getElementById('min_ram').value = 8;
+                    document.getElementById('min_performance').value = 60;
+                } else if (filterType === 'highRam') {
+                    document.getElementById('min_price').value = 15000;
+                    document.getElementById('max_price').value = 35000;
+                    document.getElementById('min_ram').value = 16;
+                    document.getElementById('min_performance').value = 60;
+                } else if (filterType === 'asus') {
+                    document.getElementById('min_price').value = 20000;
+                    document.getElementById('max_price').value = 35000;
+                    document.getElementById('brand').value = 'ASUS';
+                    document.getElementById('min_performance').value = 70;
+                }
+                
+                render();
+            });
+        });
+
+        init();
+    </script>
+</body>
+</html>
